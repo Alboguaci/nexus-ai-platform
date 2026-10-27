@@ -1,0 +1,27 @@
+{
+  "name": "nexus-ai-platform",
+  "version": "1.0.0",
+  "description": "NexusAI Platform - Orquestación de Agentes de IA para Entornos Críticos. Prototipo Cloud-Native, Gobernanza Transaccional Saga y Resiliencia Sistémica.",
+  "main": "app.js",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve . -l 3000",
+    "build": "echo 'Production Static Build Ready'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alboguaci/nexus-ai-platform.git"
+  },
+  "keywords": [
+    "software-architecture",
+    "cloud-native",
+    "multi-agent",
+    "saga-pattern",
+    "kubernetes",
+    "iso-25010",
+    "uml-2.5",
+    "tecnologica-del-oriente"
+  ],
+  "author": "Juan Carlos Benítez Rojas & Juan José Córdoba Eraso",
+  "license": "MIT"
+}
