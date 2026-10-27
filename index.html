@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusAI Platform - Orquestación Empresarial de Agentes de IA</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 antialiased">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Brand Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-100">
+                        <i data-lucide="bot" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xl font-bold tracking-tight text-slate-900">Nexus<span class="text-indigo-600">AI</span></span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">Enterprise Cloud</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Plataforma Multi-Agente de Automatización de Procesos</p>
+                    </div>
+                </div>
+
+                <!-- Live Cloud Status Pill & Navigation Actions -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        <span>Multi-Agent Mesh: Operativo (AWS us-east-1 + Vercel Edge)</span>
+                    </div>
+
+                    <button id="btn-open-modal" class="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition-all shadow-indigo-200">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>Ejecutar Flujo Multi-Agente</span>
+                    </button>
+
+                    <div class="flex items-center space-x-2 pl-3 border-l border-slate-200">
+                        <div class="h-8 w-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">NX</div>
+                        <div class="hidden lg:block text-left text-xs">
+                            <div class="font-semibold text-slate-900">Juan Benítez & Juan Córdoba</div>
+                            <div class="text-slate-500">Arquitectura de Software</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sub-Navbar Navigation Tabs -->
+    <div class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex space-x-8" aria-label="Tabs">
+                <button onclick="switchTab('tab-operations')" id="tab-btn-operations" class="tab-btn border-indigo-600 text-indigo-600 whitespace-nowrap py-3.5 px-1 border-b-2 font-medium text-sm flex items-center space-x-2">
+                    <i data-lucide="activity" class="w-4 h-4"></i>
+                    <span>Centro de Operaciones en Vivo</span>
+                </button>
+                <button onclick="switchTab('tab-agents')" id="tab-btn-agents" class="tab-btn border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-3.5 px-1 border-b-2 font-medium text-sm flex items-center space-x-2">
+                    <i data-lucide="cpu" class="w-4 h-4"></i>
+                    <span>Flota de Agentes Inteligentes</span>
+                </button>
+                <button onclick="switchTab('tab-architecture')" id="tab-btn-architecture" class="tab-btn border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-3.5 px-1 border-b-2 font-medium text-sm flex items-center space-x-2">
+                    <i data-lucide="network" class="w-4 h-4"></i>
+                    <span>Vistas Arquitectónicas UML (4+1)</span>
+                </button>
+                <button onclick="switchTab('tab-metrics')" id="tab-btn-metrics" class="tab-btn border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-3.5 px-1 border-b-2 font-medium text-sm flex items-center space-x-2">
+                    <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                    <span>Atributos ISO/IEC 25010</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ============================================== -->
+        <!-- TAB 1: CENTRO DE OPERACIONES EN VIVO          -->
+        <!-- ============================================== -->
+        <div id="tab-operations" class="tab-content space-y-6">
+            <!-- Executive KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 rounded-lg bg-indigo-50 text-indigo-600">
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Tareas Procesadas</p>
+                        <h3 class="text-2xl font-bold text-slate-900" id="kpi-total-tasks">14,820</h3>
+                        <p class="text-xs text-emerald-600 font-semibold mt-0.5 flex items-center">
+                            <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> +18.4% vs semana previa
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 rounded-lg bg-emerald-50 text-emerald-600">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Resolución Autónoma</p>
+                        <h3 class="text-2xl font-bold text-slate-900">94.6%</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Sin intervención humana</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 rounded-lg bg-amber-50 text-amber-600">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Latencia Media E2E</p>
+                        <h3 class="text-2xl font-bold text-slate-900">1.42 s</h3>
+                        <p class="text-xs text-emerald-600 font-semibold mt-0.5">p95 en 2.10 s</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                    <div class="p-3 rounded-lg bg-purple-50 text-purple-600">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Precisión de Auditoría</p>
+                        <h3 class="text-2xl font-bold text-slate-900">99.1%</h3>
+                        <p class="text-xs text-purple-600 font-semibold mt-0.5">Guardrails de seguridad activos</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operations Table & Filters -->
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Bandeja de Operaciones y Flujos de Agentes</h2>
+                        <p class="text-xs text-slate-500">Registro en tiempo real de transacciones coordinadas mediante la máquina de estados Saga</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <select id="filter-status" onchange="filterTasks()" class="text-xs border border-slate-300 rounded-lg px-3 py-2 bg-slate-50 text-slate-700 font-medium focus:ring-2 focus:ring-indigo-500">
+                            <option value="ALL">Todos los Estados</option>
+                            <option value="RESOLVED">Resuelto por Agentes</option>
+                            <option value="PROCESSING">En Procesamiento</option>
+                            <option value="REVIEW">Revisión Humana Requerida</option>
+                            <option value="COMPENSATED">Compensado por Falla</option>
+                        </select>
+                        <button onclick="refreshTaskData()" class="p-2 border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-600 transition" title="Refrescar">
+                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                <th class="py-3 px-4">ID Operación</th>
+                                <th class="py-3 px-4">Canal / Origen</th>
+                                <th class="py-3 px-4">Solicitud de Negocio</th>
+                                <th class="py-3 px-4">Agentes Involucrados</th>
+                                <th class="py-3 px-4">Latencia</th>
+                                <th class="py-3 px-4">Estado Transaccional</th>
+                                <th class="py-3 px-4 text-right">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="task-table-body" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Populated dynamically via app.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- TAB 2: FLOTA DE AGENTES INTELIGENTES          -->
+        <!-- ============================================== -->
+        <div id="tab-agents" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="text-lg font-bold text-slate-900">Arquitectura de Agentes Autónomos Especializados</h2>
+                <p class="text-xs text-slate-500">Cada agente opera como un microservicio desacoplado con su propia memoria contextual y herramientas asignadas</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Agent 1: Triage Agent -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="p-2.5 rounded-xl bg-indigo-50 text-indigo-600">
+                                <i data-lucide="filter" class="w-6 h-6"></i>
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                                En Línea (12 pods)
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base">Agente de Triaje y Enrutamiento</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Analiza la semántica de mensajes entrantes, extrae intenciones con LLMs ligeros y clasifica urgencia/SLA en menos de 120 ms.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-2 text-xs">
+                        <div class="flex justify-between text-slate-600">
+                            <span>Modelo Base:</span>
+                            <span class="font-semibold text-slate-800">Gemini 1.5 Flash</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Throughput:</span>
+                            <span class="font-semibold text-slate-800">450 ops/seg</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Patrón GoF:</span>
+                            <span class="font-semibold text-indigo-600">Chain of Responsibility</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agent 2: Resolution & RAG Agent -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="p-2.5 rounded-xl bg-violet-50 text-violet-600">
+                                <i data-lucide="brain-circuit" class="w-6 h-6"></i>
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                                En Línea (18 pods)
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base">Agente de Resolución RAG</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Consulta la base de conocimiento vectorial en Pinecone/Qdrant, elabora diagnósticos y ejecuta llamadas a APIs externas seguras.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-2 text-xs">
+                        <div class="flex justify-between text-slate-600">
+                            <span>Modelo Base:</span>
+                            <span class="font-semibold text-slate-800">Claude 3.5 Sonnet</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Throughput:</span>
+                            <span class="font-semibold text-slate-800">180 ops/seg</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Patrón GoF:</span>
+                            <span class="font-semibold text-indigo-600">Strategy & Adapter</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agent 3: Safety & Compliance Agent -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="p-2.5 rounded-xl bg-purple-50 text-purple-600">
+                                <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                                En Línea (8 pods)
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base">Agente Auditor de Compliance</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Aplica barandillas éticas (Guardrails), detecta alucinaciones, protege datos sensibles (PII) y deriva a revisión humana si confianza < 90%.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-2 text-xs">
+                        <div class="flex justify-between text-slate-600">
+                            <span>Modelo Base:</span>
+                            <span class="font-semibold text-slate-800">Llama 3 70B Guard</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Throughput:</span>
+                            <span class="font-semibold text-slate-800">320 ops/seg</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Patrón GoF:</span>
+                            <span class="font-semibold text-indigo-600">Proxy & Decorator</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agent 4: Supervisor & Saga Coordinator -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="p-2.5 rounded-xl bg-amber-50 text-amber-600">
+                                <i data-lucide="compass" class="w-6 h-6"></i>
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                                En Línea (6 pods)
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base">Orquestador Saga Supervisor</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Mantiene la máquina de estados transaccional distribuida, orquesta las llamadas entre agentes y ejecuta rollbacks compensatorios ante fallos.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-2 text-xs">
+                        <div class="flex justify-between text-slate-600">
+                            <span>Almacén Estado:</span>
+                            <span class="font-semibold text-slate-800">Redis Enterprise Multi-AZ</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Consistencia:</span>
+                            <span class="font-semibold text-slate-800">Saga Eventual Determinista</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>Patrón GoF:</span>
+                            <span class="font-semibold text-indigo-600">Mediator & State</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- TAB 3: VISTAS ARQUITECTÓNICAS UML             -->
+        <!-- ============================================== -->
+        <div id="tab-architecture" class="tab-content hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Modelado Arquitectónico Formal bajo ISO/IEC/IEEE 42010</h2>
+                    <p class="text-xs text-slate-500">Cuatro vistas complementarias requeridas por la guía oficial de la Actividad 2</p>
+                </div>
+            </div>
+
+            <!-- View Selector Buttons -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <button onclick="renderUmlView('use-case')" id="uml-btn-use-case" class="uml-selector-btn py-3 px-4 rounded-xl border-2 border-indigo-600 bg-indigo-50 text-indigo-700 font-semibold text-xs text-left shadow-sm">
+                    <span class="block text-indigo-500 text-[10px] uppercase tracking-wider font-bold">Vista 1</span>
+                    Casos de Uso Multi-Agente
+                </button>
+                <button onclick="renderUmlView('classes')" id="uml-btn-classes" class="uml-selector-btn py-3 px-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-semibold text-xs text-left shadow-sm">
+                    <span class="block text-slate-400 text-[10px] uppercase tracking-wider font-bold">Vista 2</span>
+                    Dominio en Clases (DDD)
+                </button>
+                <button onclick="renderUmlView('sequence')" id="uml-btn-sequence" class="uml-selector-btn py-3 px-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-semibold text-xs text-left shadow-sm">
+                    <span class="block text-slate-400 text-[10px] uppercase tracking-wider font-bold">Vista 3</span>
+                    Secuencia Transaccional Saga
+                </button>
+                <button onclick="renderUmlView('deployment')" id="uml-btn-deployment" class="uml-selector-btn py-3 px-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-semibold text-xs text-left shadow-sm">
+                    <span class="block text-slate-400 text-[10px] uppercase tracking-wider font-bold">Vista 4</span>
+                    Despliegue Multi-AZ Cloud
+                </button>
+            </div>
+
+            <!-- UML Visualizer Card -->
+            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div id="uml-title" class="font-bold text-slate-900 text-base mb-1">Diagrama de Casos de Uso: Interacción Humano-Agente en Plataforma IA</div>
+                <div id="uml-desc" class="text-xs text-slate-500 mb-4">Modelado formal UML 2.5 que detalla la relación entre los usuarios empresariales, los agentes autónomos de IA y el bus de orquestación.</div>
+                
+                <div class="bg-slate-900 rounded-lg p-4 overflow-x-auto flex justify-center items-center min-h-[360px] border border-slate-800" id="uml-svg-container">
+                    <!-- SVG injected via app.js -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- TAB 4: ATRIBUTOS DE CALIDAD ISO/IEC 25010     -->
+        <!-- ============================================== -->
+        <div id="tab-metrics" class="tab-content hidden space-y-6">
+            <div>
+                <h2 class="text-lg font-bold text-slate-900">Evaluación de Calidad de Producto según ISO/IEC 25010:2023</h2>
+                <p class="text-xs text-slate-500">Métricas cuantitativas verificadas en el entorno cloud multi-agente frente a la arquitectura monolítica tradicional</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Latency Chart -->
+                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">Distribución de Latencia por Etapa del Agente (ms)</h3>
+                    <p class="text-xs text-slate-500 mb-4">Tiempo de procesamiento desagregado por cada componente del pipeline cognitivo</p>
+                    <div class="h-64">
+                        <canvas id="chart-latency"></canvas>
+                    </div>
+                </div>
+
+                <!-- Radar Chart ISO 25010 -->
+                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">Cumplimiento Multidimensional de Atributos de Calidad</h3>
+                    <p class="text-xs text-slate-500 mb-4">Comparativa formal entre el sistema monolítico previo vs la arquitectura NexusAI</p>
+                    <div class="h-64">
+                        <canvas id="chart-radar"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal: Ejecutar Nuevo Flujo Multi-Agente en Vivo -->
+    <div id="modal-new-task" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in duration-150">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <div class="flex items-center space-x-2.5">
+                    <div class="h-9 w-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+                        <i data-lucide="play" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base">Iniciar Flujo de Trabajo Multi-Agente</h3>
+                        <p class="text-xs text-slate-500">Dispara la orquestación Saga en vivo sobre los microservicios cognitivos</p>
+                    </div>
+                </div>
+                <button id="btn-close-modal" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Canal de Entrada Omnicanal</label>
+                    <select id="input-channel" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 bg-slate-50 text-slate-800">
+                        <option value="Portal Web">Portal Web de Clientes (REST API)</option>
+                        <option value="WhatsApp Business">WhatsApp Business API (Webhook Asíncrono)</option>
+                        <option value="Email Corporativo">Email Corporativo (SMTP / IMAP Parser)</option>
+                        <option value="Integración ERP">Integración ERP / CRM (Bus Kafka)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Caso Empresarial o Solicitud del Cliente</label>
+                    <textarea id="input-prompt" rows="3" class="w-full text-xs border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:ring-2 focus:ring-indigo-500" placeholder="Ej: Cliente solicita la reprogramación de una orden con cambio de dirección de despacho y validación de cobertura logística..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Modo de Simulación de Resiliencia</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50">
+                            <input type="radio" name="sim-mode" value="SUCCESS" checked class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-2 text-xs font-medium text-slate-800">Flujo Exitoso (Happy Path)</span>
+                        </label>
+                        <label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 has-[:checked]:border-red-600 has-[:checked]:bg-red-50">
+                            <input type="radio" name="sim-mode" value="FAILURE" class="text-red-600 focus:ring-red-500">
+                            <span class="ml-2 text-xs font-medium text-slate-800">Inyectar Falla (Saga Rollback)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Live Pipeline Visual Trace -->
+                <div id="live-pipeline" class="hidden p-3.5 rounded-lg bg-slate-900 text-white font-mono text-xs space-y-1.5 max-h-48 overflow-y-auto">
+                    <!-- Logs appear here dynamically -->
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-3 border-t border-slate-100">
+                <button id="btn-cancel" class="px-4 py-2 border border-slate-300 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50">Cancelar</button>
+                <button id="btn-run-flow" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-sm transition">Comenzar Orquestación</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500">
+            <div>
+                © 2026 NexusAI Platform | Enterprise Autonomous Multi-Agent Mesh
+            </div>
+            <div class="mt-2 sm:mt-0 space-x-4">
+                <span>Sistema de Arquitectura Cloud-Native</span> <span>•</span>
+                <span>Juan Carlos Benítez & Juan José Córdoba</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- App Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
