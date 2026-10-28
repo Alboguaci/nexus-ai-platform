@@ -21,8 +21,12 @@
 
 * 🌐 **Prototipo Desplegado en Producción (Vercel CDN):**  
   [https://nexus-ai-platform-tecor.vercel.app](https://nexus-ai-platform-tecor.vercel.app)
-* 📹 **Video de Sustentación Oral y Demostración (15 Minutos):**  
-  [Video de Sustentación en YouTube (No Listado) / Repositorio Cloud](https://nexus-ai-platform-tecor.vercel.app)
+* 📹 **Video de Sustentación Oral y Demostración (YouTube):**  
+  [https://youtu.be/mGfIUqPrF5Y](https://youtu.be/mGfIUqPrF5Y)
+* 📁 **Carpeta de Soportes y Evidencias en la Nube (OneDrive):**  
+  [nexus-Ai en OneDrive](https://tecnologicadelorienteedu-my.sharepoint.com/:f:/g/personal/juanbenitez211_tecnologicadeloriente_edu_co/IgBMa_5y2kNDSKlLc_IgADLqAbWW_v6ISMYx33vXxjeWDP8?e=EOwpMT)
+* 💻 **Repositorio Oficial de Código Fuente (GitHub):**  
+  [https://github.com/Alboguaci/nexus-ai-platform](https://github.com/Alboguaci/nexus-ai-platform)
 * 📂 **Suite de 21 Evidencias y Diagramas Arquitectónicos en Alta Definición:**  
   Ubicada en este repositorio bajo el directorio [`docs/architecture/`](./docs/architecture/) y sincronizada en OneDrive.
 
